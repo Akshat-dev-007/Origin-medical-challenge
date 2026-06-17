@@ -64,19 +64,36 @@ class FetalUltrasoundDataset(Dataset):
         return image, mask
 
 def get_dataloaders(image_dir, mask_dir, batch_size=8, val_split=0.2):
-    # Sort to ensure images and masks align
-    all_images = sorted([os.path.join(image_dir, f) for f in os.listdir(image_dir)])
-    all_masks = sorted([os.path.join(mask_dir, f) for f in os.listdir(mask_dir)])
+    # 1. Get all files and filter out hidden files like .DS_Store
+    image_files = [f for f in os.listdir(image_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
+    mask_files = [f for f in os.listdir(mask_dir) if f.endswith(('.png', '.jpg', '.jpeg'))]
+
+    # 2. Map files to their base ID (e.g., '000_HC.png' -> '000_HC' and '000_HC_Annotation.png' -> '000_HC')
+    # This handles the '_Annotation' suffix dynamically
+    image_dict = {f.split('.')[0].replace('_HC', ''): f for f in image_files}
+    mask_dict = {f.split('.')[0].replace('_HC', '').replace('_Annotation', ''): f for f in mask_files}
+
+    # 3. Find the intersection of IDs present in both folders
+    common_ids = sorted(list(set(image_dict.keys()).intersection(set(mask_dict.keys()))))
     
-    # Split raw data BEFORE augmentation
+    print(f"Found {len(image_files)} images and {len(mask_files)} masks.")
+    print(f"Successfully matched {len(common_ids)} pairs based on Subject IDs.")
+
+    # 4. Rebuild matching, ordered path lists
+    image_paths = [os.path.join(image_dir, image_dict[cid]) for cid in common_ids]
+    mask_paths = [os.path.join(mask_dir, mask_dict[cid]) for cid in common_ids]
+
+    # 5. Perform the train/val split safely
     train_imgs, val_imgs, train_masks, val_masks = train_test_split(
-        all_images, all_masks, test_size=val_split, random_state=42
+        image_paths, mask_paths, test_size=val_split, random_state=42
     )
-    
+
+    # 6. Instantiate datasets
     train_dataset = FetalUltrasoundDataset(train_imgs, train_masks, is_train=True)
     val_dataset = FetalUltrasoundDataset(val_imgs, val_masks, is_train=False)
-    
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
-    
+
+    # 7. Create dataloaders
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, drop_last=False)
+
     return train_loader, val_loader
