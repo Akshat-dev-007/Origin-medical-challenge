@@ -8,8 +8,8 @@ def test_model():
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     
     # These paths align with the Colab environment setup
-    IMAGE_DIR = "/content/data/images" 
-    MASK_DIR = "/content/data/masks"
+    IMAGE_DIR = "/content/data/images/images" 
+    MASK_DIR = "/content/data/masks/masks"
     WEIGHTS_PATH = "../Model Weights/hypothesis_1_unet_baseline.pth"
     
     # We only need the validation/test loader here

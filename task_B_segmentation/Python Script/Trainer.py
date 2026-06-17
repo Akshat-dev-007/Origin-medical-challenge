@@ -12,8 +12,8 @@ def train_model():
     NUM_EPOCHS = 30
     
     # Update these paths when running in Colab
-    IMAGE_DIR = "/content/data/images" 
-    MASK_DIR = "/content/data/masks"
+    IMAGE_DIR = "/content/data/images/images" 
+    MASK_DIR = "/content/data/masks/masks"
     SAVE_DIR = "../Model Weights/"
     
     os.makedirs(SAVE_DIR, exist_ok=True)
