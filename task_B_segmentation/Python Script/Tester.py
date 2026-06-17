@@ -1,7 +1,8 @@
 import torch
+import numpy as np
 from Assets.dataset import get_dataloaders
 from Assets.model import UNet
-from Assets.utils import calculate_metrics
+from Assets.utils import calculate_metrics, extract_biometry_points
 import os
 
 def test_model():
@@ -28,6 +29,7 @@ def test_model():
     total_iou = 0.0
     
     print("Starting evaluation...")
+    first_image_processed = False
     with torch.no_grad():
         for images, masks in test_loader:
             images, masks = images.to(DEVICE), masks.to(DEVICE)
@@ -36,6 +38,21 @@ def test_model():
             dice, iou = calculate_metrics(predictions, masks)
             total_dice += dice
             total_iou += iou
+
+            # Extract landmarks for the very first validation image to prove it works
+            if not first_image_processed:
+                # Convert prediction to binary numpy array
+                pred_probs = torch.sigmoid(predictions[0]).cpu().numpy().squeeze()
+                binary_mask = (pred_probs > 0.5).astype(np.uint8)
+                
+                landmarks = extract_biometry_points(binary_mask)
+                if landmarks:
+                    print("\n--- End-to-End Pipeline Verification ---")
+                    print("Successfully extracted biometry points from predicted mask:")
+                    print(f"BPD Points (Minor Axis): a={landmarks['a']}, c={landmarks['c']}")
+                    print(f"OFD Points (Major Axis): b={landmarks['b']}, d={landmarks['d']}")
+                    print("----------------------------------------\n")
+                first_image_processed = True
             
     avg_dice = total_dice / len(test_loader)
     avg_iou = total_iou / len(test_loader)
