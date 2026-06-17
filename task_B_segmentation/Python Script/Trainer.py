@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from dataset import get_dataloaders
-from model import UNet
+from Assets.dataset import get_dataloaders
+from Assets.model import UNet
 import os
 
 def train_model():
