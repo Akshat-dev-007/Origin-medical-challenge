@@ -1,0 +1,24 @@
+# Ignore datasets
+data/
+*.zip
+*.tar.gz
+
+# Ignore model weights
+*.pth
+*.pt
+Model Weights/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Ignore OS files
+.DS_Store
+
+# Ignore venv
+venv/
+
+# Ignore .env files
+.env
+
