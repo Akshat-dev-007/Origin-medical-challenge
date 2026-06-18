@@ -10,7 +10,7 @@ from Assets.model_advanced import AdvancedLandmarkRegressor  # Using your best m
 # --- Paths ---
 IMAGE_DIR = "/content/data/images/images"
 CSV_PATH = "/content/data/role_challenge_dataset_ground_truth.csv"
-WEIGHTS_PATH = "Model Weights/hypothesis_4_attentive_fpn.pth"  # Pointing to the advanced weights
+WEIGHTS_PATH = "Model Weights/hypothesis_4_attentive_fpn_best.pth"  # Pointing to the advanced weights
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 BATCH_SIZE = 16
 
