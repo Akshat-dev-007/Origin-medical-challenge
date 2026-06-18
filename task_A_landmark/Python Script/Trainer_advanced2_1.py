@@ -2,7 +2,7 @@ import os
 import torch
 import torch.optim as optim
 from Assets.dataset import get_dataloaders
-from Assets.model_advanced import AdvancedLandmarkRegressor
+from Assets.model_advanced2_1 import AdvancedLandmarkRegressor
 from Assets.losses import LandmarkLoss
 
 # --- Hyperparameters ---
@@ -90,7 +90,7 @@ def train_model():
         # Save the BEST model on validation pixel error, not the last epoch.
         if avg_pixel_error < best_pixel_error:
             best_pixel_error = avg_pixel_error
-            torch.save(model.state_dict(), os.path.join(SAVE_DIR, "hypothesis_4_attentive_fpn.pth"))
+            torch.save(model.state_dict(), os.path.join(SAVE_DIR, "hypothesis_4_attentive_fpn_best.pth"))
 
     print(f"Training complete. Best Val Avg Error: {best_pixel_error:.2f} px (best checkpoint saved).")
 
