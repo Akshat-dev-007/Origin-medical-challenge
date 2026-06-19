@@ -2,7 +2,7 @@ import os
 import torch
 import torch.optim as optim
 from Assets.dataset import get_dataloaders
-from Assets.model_advanced import AdvancedLandmarkRegressor
+from Assets.model_advanced2_1 import AdvancedLandmarkRegressor
 from Assets.losses import LandmarkLoss
 
 # --- Hyperparameters ---
