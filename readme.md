@@ -9,7 +9,7 @@ This repository contains a complete, end-to-end deep learning and computer visio
 Repository Structure
 The codebase is fully modular, allowing independent training and evaluation of different architectures without overlapping dependencies.
 
-Plaintext
+```
 Origin-medical-challenge/
 ├── task_1_segmentation/         # Task B Pipeline
 │   ├── Python Script/
@@ -33,6 +33,7 @@ Origin-medical-challenge/
 │   │   ├── Tester.py            # Generates MSE/Radial Error & CSV outputs
 │   ├── Model Weights/           # Contains .pth weight files
 │   └── Task_A_Predicted_Landmarks_advanced.csv
+```
 Data Engineering & Leakage Prevention
 To ensure robust, production-ready evaluation, strict data isolation protocols were enforced across both tasks.
 
